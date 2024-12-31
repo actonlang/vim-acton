@@ -1,0 +1,166 @@
+# Example Acton source file for testing syntax highlighting
+# TODO: Add more test cases
+# FIXME: Consider edge cases
+
+import base64
+from abc import def
+
+# Constants and literals
+TIMEOUT = 1000
+PI = 3.14159
+COMPLEX_NUM = 3.14j
+HEX_VALUE = 0xFF
+OCTAL_VALUE = 0o777
+SPECIAL_VALUES = (None, True, False, NotImplemented, ...)
+
+# String literals
+single_quote = 'Hello World'
+double_quote = "Hello World"
+triple_single = '''
+    Multiline
+    String
+'''
+triple_double = """
+    Another
+    Multiline
+"""
+raw_string = r"Raw\nString"
+bytes_string = b"Bytes string"
+raw_bytes = rb"Raw bytes string"
+escaped_string = "Escape sequences: \n \t \r \\ \' \" \xhh \ooo \u1234"
+
+# Effect system
+pure def pure_function(x: int) -> int:
+    return x + 1
+
+mut def mutable_function(x: int) -> int:
+    var result = x
+    result += 1
+    return result
+
+proc def procedure(x: int) -> None:
+    print(x)
+
+# Protocol definition
+protocol Serializable[T]:
+    serialize: () -> bytes
+    deserialize: (bytes) -> T
+    schema: () -> str
+
+# Class definitions
+class User:
+    def __init__(self, name: str, age: int) -> None:
+        self.name = name
+        self.age = age
+
+class Configuration:
+    def __init__(self) -> None:
+        self.settings = {}
+
+    def set(self, key: str, value: str) -> None:
+        self.settings[key] = value
+
+# Extensions implementing protocols
+extension User(Serializable[User]):
+    def serialize(self) -> bytes:
+        return f"{self.name},{self.age}".encode()
+
+    def deserialize(data: bytes) -> User:
+        name, age = data.decode().split(",")
+        return User(name, int(age))
+
+    def schema(self) -> str:
+        return "name:str,age:int"
+
+extension Configuration(Serializable[Configuration]):
+    def serialize(self) -> bytes:
+        return base64.encode(str(self.settings).encode())
+
+    def deserialize(data: bytes) -> Configuration:
+        cfg = Configuration()
+        cfg.settings = eval(base64.decode(data).decode())
+        return cfg
+
+    def schema(self) -> str:
+        return "settings:dict[str,str]"
+
+# Actor definitions
+actor FooActor():
+    var count = 0
+
+    def Foo(self) -> int:
+        self.count += 1
+        return self.count
+
+actor main(env):
+    f = FooActor()
+
+    def foo(self) -> int:
+        # Public method / behavior on actor
+        return 42
+
+    action def bar(self) -> int:
+        # Action effect for actor method
+        return f.Foo()
+
+# Control flow and operators
+def test_control_flow(x: int) -> int:
+    # Arithmetic operators
+    result = x + 1 - 2 * 3 / 4 // 5 % 6 @ 7
+    result **= 2
+
+    # Bitwise operators
+    bits = x & 0xFF | 0x0F ^ 0xF0
+    bits = ~bits
+    bits = bits << 2
+    bits = bits >> 1
+
+    # Comparison operators
+    if x > 0 and x < 10:
+        return x
+    elif x >= 10 or x <= -10:
+        return -x
+    elif x is None or x is not None:
+        return 0
+
+    # Loops
+    for i in range(10):
+        if i == 5:
+            continue
+        if i == 8:
+            break
+
+    while x > 0:
+        x -= 1
+
+    # Exception handling
+    try:
+        dangerous_operation()
+    except ValueError as e:
+        handle_error(e)
+    except:
+        handle_unknown_error()
+    finally:
+        cleanup()
+
+    # With statement
+    with open("file.txt") as f:
+        process_file(f)
+
+    # List comprehension
+    squares = [x * x for x in range(10) if x % 2 == 0]
+
+    return result
+
+# Type checking
+def type_check(x: Any) -> bool:
+    return isinstance(x, User)
+
+# Decorators
+@property
+def decorated_property(self) -> int:
+    return 42
+
+@staticmethod
+def utility_function() -> None:
+    pass
