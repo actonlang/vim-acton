@@ -1,6 +1,9 @@
 # vim-acton
 
-Vim syntax highlighting for the Acton programming language.
+Vim plugin for the Acton programming language, supporting:
+
+- syntax highlighting
+- smart indent
 
 ## Install
 
